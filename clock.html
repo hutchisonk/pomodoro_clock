@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Free Code Camp pomodoro clock project">
+  <meta name="author" content="Kelsey Hutchison">
+
+  <link href="https://fonts.googleapis.com/css?family=Josefin+Slab:600" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Titillium+Web:200' rel='stylesheet' type='text/css'>
+
+  <title>Pomodoro Timer</title>
+
+  <script
+    src="http://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+    crossorigin="anonymous"></script>
+
+<style>
+.title {
+  text-align:center;
+  }
+
+body {
+background-color:#236467;
+color:#86C98A;
+font-family: 'Josefin Slab',
+'Titillium Web', sans-serif;
+}
+
+.settime {
+border:5px solid #061539;
+border-radius:2px;
+width:250px;
+height:75px;
+margin:auto auto;
+text-align:center;
+padding:5px;
+list-style:none;
+}
+
+.settime li {
+display:inline;
+font-size:3em;
+}
+
+#minus {
+float:left;
+cursor:pointer;
+}
+
+#plus {
+float:right;
+cursor:pointer;
+}
+
+.display {
+position:relative;
+border:5px solid #061539;
+height:150px;
+width:200px;
+text-align:center;
+margin:5px auto;
+font-size:5em;
+vertical-align:middle;
+padding:55px 5px 0px 5px;
+}
+.display.whitetext {
+color:#fff;
+}
+
+#fillcontainer {
+position:relative;
+border:5px solid #061539;
+height:50px;
+width:250px;
+text-align:center;
+margin:5px auto;
+font-size:5em;
+vertical-align:middle;
+}
+
+#filler {
+position:absolute;
+height:100%;
+width: 0px;
+background-color:#86C98A;
+/*z-index: 5;*/
+}
+
+#fillcontainer p {
+position:absolute;
+font-family: 'Josefin+Slab',  sans-serif;
+font-size:.35em;
+left:18%;
+top:-38%;
+font-weight:lighter;
+}
+  </style>
+</head>
+
+<body>
+
+    <h3 class="title">a fun little</h3>
+    <h1 class="title">Pomodoro Clock</h1>
+    <ul class="settime">
+      <li id="minus">-</li>
+      <li id="settime"></li>
+      <li id="plus">+</li>
+    </ul>
+
+    <div class="display">Go</div>
+    <div id="fillcontainer">
+      <p>p r o g r e s s</p>
+      <div id="filler"></div>
+    </div>
+
+
+<script>
+
+$(document).ready(function() {
+var settime = 15;
+var newTime, inMotion, doneInterval, newTimeInMinutes, newMinutes, newSeconds, newFillInt;
+var timerGoing = 0;
+// var inMotion;
+// var doneInterval;
+// var newTimeInMinutes;
+// var newMinutes;
+// var newSeconds;
+var newFill = 0;
+// var newFillInt;
+  $("#settime").text(settime);
+
+  $("#minus").click(function(){
+    console.log("minus");
+    if (settime > 1) {
+    settime -= 1;
+    }
+    $("#settime").text(settime);
+  });
+
+  $("#plus").click(function(){
+    console.log("plus");
+    settime += 1;
+    $("#settime").text(settime);
+  });
+
+  $(".display").click(function() {
+    console.log("go");
+    if (timerGoing === 1) {
+      timerGoing = 0;
+      newFill = 0;
+
+      clearInterval(inMotion);
+
+      console.log("CLEAR DONE INTERVAL");
+      console.log(doneInterval);
+      clearInterval(doneInterval);
+      console.log(doneInterval);
+      $(".display").removeClass("whitetext");
+      $(".display").text("Go");
+      $("#filler").width(0);
+    } else
+      if (timerGoing === 0) {
+         timerGoing = 1;
+         $(".display").text(settime);
+         newTime = settime*60;
+         newFillInt = 240/newTime;
+         inMotion = setInterval(function() {
+         //console.log("nT is "+newTime);
+         newTime -= 1;
+         newMinutes = Math.floor(newTime/60);
+         newSeconds = (newTime%60);
+         if (newSeconds < 10) {
+          newSeconds = "0"+newSeconds.toString();
+         }
+         newFill += newFillInt;
+
+        $("#filler").width(newFill);
+        //console.log("nf is "+newFill);
+        $(".display").text(newMinutes+":"+newSeconds);
+        if (newTime <= 0) {
+        clearInterval(inMotion);
+        doneInterval = setInterval(function(){
+          $(".display").toggleClass("whitetext");
+        }, 500);
+      }
+}, 1000);
+    }//if timer was not going
+  });//.display click function
+});//document ready
+
+</script>
+
+
+
+  </body>
+</html>
